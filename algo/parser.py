@@ -1,6 +1,11 @@
 import stanza
 import json
 
+'''
+@ IMPORTANT!
+Please limit the counter beause the data is too much >.<
+'''
+
 class Parser:
     def __init__(self,arr_of_tweet):
         try:
@@ -13,16 +18,12 @@ class Parser:
         skip_first = True
         counter = 0
         for k in arr_of_tweet:
-            if(skip_first):
-                skip_first = False
-                continue
-            else:
-                tupel = self.get_tuple(k)
+                tupel = self.get_tuple(k[1])
                 if(tupel != []): array.append(tupel)
                 counter += 1
-                if(counter % 100 == 0):
+                if(counter % 50 == 0):
                   print(f"process {counter} from {len(arr_of_tweet)} data")
-                if(counter == 500): #limit up to 500 data only
+                if(counter == 100): #limit up to 50 data only
                   break
               
 
@@ -42,32 +43,36 @@ class Parser:
     def get_tuple(self,text):
       doc = self.nlp(text)
       mytuple = []
-      doc.sentences[0]
-      for i in doc.sentences[0].words:
-        opinion=""
-        target=""
-        if i.upos =='NOUN':
-          target = i.text
-          meta_target = self.stanza_word_to_list(i)
 
-          for j in doc.sentences[0].words:
-            if j.id == i.head and j.upos =='NOUN':
-              target = j.text+" "+target
+      try:
+          doc.sentences[0]
+          for i in doc.sentences[0].words:
+            opinion=""
+            target=""
+            if i.upos =='NOUN':
+              target = i.text
+              meta_target = self.stanza_word_to_list(i)
 
-          for j in doc.sentences[0].words:
-            if j.upos =="ADJ" and int(j.head) == int(i.id):
-              opinion = j.lemma
-              meta_opinion = self.stanza_word_to_list(j)
+              for j in doc.sentences[0].words:
+                if j.id == i.head and j.upos =='NOUN':
+                  target = j.text+" "+target
 
-              for k in doc.sentences[0].words:
-                if k.head == j.id:
-                  if k.id < j.id :
-                    opinion = k.lemma+" "+opinion
-                  else:
-                    opinion = opinion+" "+k.lemma
-          if opinion !="":
-            mytuple = {"kalimat":text,"aspect":target.strip(),"opinion":opinion.strip(),"true_tuple":'',"sentiment":'',"meta_aspect":meta_target,"meta_opinion":meta_opinion}
-      return mytuple
+              for j in doc.sentences[0].words:
+                if j.upos =="ADJ" and int(j.head) == int(i.id):
+                  opinion = j.lemma
+                  meta_opinion = self.stanza_word_to_list(j)
+
+                  for k in doc.sentences[0].words:
+                    if k.head == j.id:
+                      if k.id < j.id :
+                        opinion = k.lemma+" "+opinion
+                      else:
+                        opinion = opinion+" "+k.lemma
+              if opinion !="":
+                mytuple = {"kalimat":text,"aspect":target.strip(),"opinion":opinion.strip(),"true_tuple":'',"sentiment":'',"meta_aspect":meta_target,"meta_opinion":meta_opinion}
+          return mytuple
+      except Exception as e:
+        return []
 
 
 

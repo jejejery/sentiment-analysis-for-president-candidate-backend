@@ -5,4 +5,5 @@ from . import views
 urlpatterns = [
     path('receive_json/', views.receive_json, name='receive_json'),
     path('receive_classify_json/', views.receive_classify_json, name='receive_classify_json'),
+    path('receive_sentiment_json/', views.receive_sentiment_json, name='receive_sentiment_json'),
 ]
