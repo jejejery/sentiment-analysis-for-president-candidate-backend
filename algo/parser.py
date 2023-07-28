@@ -22,7 +22,7 @@ class Parser:
                 counter += 1
                 if(counter % 100 == 0):
                   print(f"process {counter} from {len(arr_of_tweet)} data")
-                if(counter == 100):
+                if(counter == 500): #limit up to 500 data only
                   break
               
 
