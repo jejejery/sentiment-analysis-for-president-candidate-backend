@@ -11,6 +11,7 @@ class Parser:
         
         array = []
         skip_first = True
+        counter = 0
         for k in arr_of_tweet:
             if(skip_first):
                 skip_first = False
@@ -18,6 +19,12 @@ class Parser:
             else:
                 tupel = self.get_tuple(k)
                 if(tupel != []): array.append(tupel)
+                counter += 1
+                if(counter % 100 == 0):
+                  print(f"process {counter} from {len(arr_of_tweet)} data")
+                if(counter == 100):
+                  break
+              
 
         self.tuples = array
 
